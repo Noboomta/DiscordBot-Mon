@@ -10,8 +10,8 @@ const client = new Discord.Client();
 const queue = new Map();
 const random_user_queue = [ '364394461775790080', '694073806972518401', '421602435522625548' ];
 
-const btext = ["ว้าวซ่า555", "55555555555", "ไปคุยกับแม่ไป", "ชวนแม่ไปด้วยนะ"];
-const btext2 = ["เหงาก็ไปนอนดิ", "ไปคุยกับแม่ไป"];
+const btext = ["ว้าวซ่า555", "....", "55555555555", "ไปคุยกับแม่ไป", "ชวนแม่ไปด้วยนะ", "อะไร5555555", "อร้ากกกกก", ";-;"];
+const btext2 = ["เหงาก็ไปนอนดิ", "ไปคุยกับแม่ไป", "อะไร555555", ";-;"];
 
 client.once("ready", () => {
   console.log("Ready!");
@@ -55,6 +55,7 @@ client.on("message", async message => {
     return;
   }
    else if (message.content.startsWith(`${prefix}stop`)) {
+    message.channel.send('หยุดก็ได้ๆๆ');
     stop(message, serverQueue);
     return;
   }
@@ -181,7 +182,11 @@ function play(guild, song) {
   try {
     const serverQueue = queue.get(guild.id);
     if (!song) {
-      serverQueue.voiceChannel.leave();
+      setTimeout(() => { 
+        // message.channel.send("ฉันมีธุระที่โลกอนาคต กลับก่อนนะ!!!");
+        serverQueue.voiceChannel.leave(); 
+      }, 60000);
+      // serverQueue.voiceChannel.leave();
       queue.delete(guild.id);
       return;
     }
