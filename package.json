@@ -1,0 +1,37 @@
+{
+  "name": "discordbot-mon",
+  "version": "1.0.0",
+  "description": "MonBot for all Nobita",
+  "main": "botMon.js",
+  "dependencies": {
+    "@discordjs/opus": "^0.4.0",
+    "avconv": "^3.1.0",
+    "cheerio": "^1.0.0-rc.5",
+    "discord.js": "^12.5.1",
+    "ffmpeg": "0.0.4",
+    "ffmpeg-static": "^4.2.7",
+    "fluent-ffmpeg": "^2.1.2",
+    "puppeteer": "^7.0.1",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
+    "scrape-youtube": "^2.0.9",
+    "ytdl-core": "^4.4.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Noboomta/DiscordBot-Mon.git"
+  },
+  "keywords": [
+    "MonBot"
+  ],
+  "author": "Noboomta",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Noboomta/DiscordBot-Mon/issues"
+  },
+  "homepage": "https://github.com/Noboomta/DiscordBot-Mon#readme"
+}
