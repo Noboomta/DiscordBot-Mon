@@ -56,6 +56,7 @@ client.on("message", function _callee(message) {
             break;
           }
 
+          // console.log(message);
           execute(message, serverQueue);
           return _context.abrupt("return");
 
@@ -113,42 +114,42 @@ function execute(message, serverQueue) {
           return _context2.abrupt("return", message.channel.send("I need the permissions to join and speak in your voice channel!"));
 
         case 8:
-          _context2.next = 10;
+          _context2.prev = 8;
+          _context2.next = 11;
           return regeneratorRuntime.awrap(ytdl.getInfo(args[1]));
 
-        case 10:
+        case 11:
           songInfo = _context2.sent;
+          console.log(args[1]);
+          _context2.next = 21;
+          break;
+
+        case 15:
+          _context2.prev = 15;
+          _context2.t0 = _context2["catch"](8);
+          youtube.search(args[1]).then(function (results) {
+            console.log("in catch"); // Unless you specify a type, it will only return 'video' results
+
+            console.log(results.videos[0].link); // console.log(typeof(results.videos[0].link))
+            // args[1] = results.videos[0].link;
+          });
+          _context2.next = 20;
+          return regeneratorRuntime.awrap(ytdl.getInfo(args[1]));
+
+        case 20:
+          songInfo = _context2.sent;
+
+        case 21:
+          // songInfo = await ytdl.getInfo(args[1])  
           song = {
             title: songInfo.videoDetails.title,
             url: songInfo.videoDetails.video_url
-          }; // try {
-          //   songInfo = await ytdl.getInfo(args[1])  
-          //   song = {
-          //     title: songInfo.videoDetails.title,
-          //     url: songInfo.videoDetails.video_url,
-          //   };
-          // } catch (error) {
-          //   var ur = ""
-          //   youtube.search(args[1]).then(results => {
-          //     console.log(results.videos[0].link);
-          //     ur = results.videos[0].link
-          //   });
-          //   console.log(ur);
-          //   console.log(ur);
-          //   songInfo = await ytdl.getInfo(ur)  
-          //   song = {
-          //     title: songInfo.videoDetails.title,
-          //     url: songInfo.videoDetails.video_url,
-          //   };
-          // }
-          // songInfo = await ytdl.getInfo(args[1])  
-          // const song = {
-          //   title: songInfo.videoDetails.title,
-          //   url: songInfo.videoDetails.video_url,
-          // };    
+          };
+
+          try {} catch (error) {}
 
           if (serverQueue) {
-            _context2.next = 31;
+            _context2.next = 42;
             break;
           }
 
@@ -162,38 +163,38 @@ function execute(message, serverQueue) {
           };
           queue.set(message.guild.id, queueContruct);
           queueContruct.songs.push(song);
-          _context2.prev = 16;
-          _context2.next = 19;
+          _context2.prev = 27;
+          _context2.next = 30;
           return regeneratorRuntime.awrap(voiceChannel.join());
 
-        case 19:
+        case 30:
           connection = _context2.sent;
           queueContruct.connection = connection;
           play(message.guild, queueContruct.songs[0]);
-          _context2.next = 29;
+          _context2.next = 40;
           break;
 
-        case 24:
-          _context2.prev = 24;
-          _context2.t0 = _context2["catch"](16);
-          console.log(_context2.t0);
+        case 35:
+          _context2.prev = 35;
+          _context2.t1 = _context2["catch"](27);
+          console.log(_context2.t1);
           queue["delete"](message.guild.id);
-          return _context2.abrupt("return", message.channel.send(_context2.t0));
+          return _context2.abrupt("return", message.channel.send(_context2.t1));
 
-        case 29:
-          _context2.next = 33;
+        case 40:
+          _context2.next = 44;
           break;
 
-        case 31:
+        case 42:
           serverQueue.songs.push(song);
           return _context2.abrupt("return", message.channel.send("".concat(song.title, " has been added to the queue!")));
 
-        case 33:
+        case 44:
         case "end":
           return _context2.stop();
       }
     }
-  }, null, null, [[16, 24]]);
+  }, null, null, [[8, 15], [27, 35]]);
 }
 
 function skip(message, serverQueue) {

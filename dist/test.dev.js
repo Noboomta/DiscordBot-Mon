@@ -14,12 +14,13 @@ var $ = require('cheerio');
 
 var youtube = require('scrape-youtube')["default"];
 
-youtube.search('เพลงช้า').then(function (results) {
+var a;
+youtube.search('ลงใจ').then(function (results) {
   // Unless you specify a type, it will only return 'video' results
   console.log(results.videos[0].link);
-});
-youtube.search('song', {
-  type: 'playlist'
-}).then(function (results) {
-  console.log(results.videos);
-});
+  a = results.videos[0].link;
+}); // youtube.search('song', { type: 'playlist' }).then(results => {
+//     console.log(results.videos);
+//   })
+
+console.log(a === "https://youtu.be/8AwyKlXOFZQ");

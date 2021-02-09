@@ -8,6 +8,10 @@ const youtube = require('scrape-youtube').default;
 const client = new Discord.Client();
 
 const queue = new Map();
+const random_user_queue = [ '364394461775790080', '694073806972518401', '421602435522625548' ];
+
+const btext = ["ว้าวซ่า555", "55555555555", "ไปคุยกับแม่ไป", "ชวนแม่ไปด้วยนะ"];
+const btext2 = ["เหงาก็ไปนอนดิ", "ไปคุยกับแม่ไป"];
 
 client.once("ready", () => {
   console.log("Ready!");
@@ -22,19 +26,35 @@ client.once("disconnect", () => {
 });
 
 client.on("message", async message => {
+  // console.log(message.content);
   if (message.content === 'ม่อน') message.channel.send("ว่าไงเหล่าโนบิตะ");
+  
+  // if (message.content === 'สมาชิก')  console.log(message);
+  if (message.content === (`${prefix}คุยด้วยหน่อย`))  {
+    let i = random_user_queue[Math.floor(Math.random()*random_user_queue.length)]
+    let lucky_user = client.users.cache.find(user => user.id === i);
+    await message.channel.send(`${lucky_user} is the best!`);
+  }
+  if (message.content === 'หวัดดีม่อน') message.channel.send(btext[Math.floor(Math.random()*btext.length)]);
+  if (message.content.startsWith("เหงา")) message.channel.send(btext2[Math.floor(Math.random()*btext2.length)]);
   if (message.author.bot) return;
   if (!message.content.startsWith(prefix)) return;
 
   const serverQueue = queue.get(message.guild.id);
 
   if (message.content.startsWith(`${prefix}play`)) {
+    // console.log(message);
     execute(message, serverQueue);
     return;
   } else if (message.content.startsWith(`${prefix}skip`)) {
     skip(message, serverQueue);
     return;
-  } else if (message.content.startsWith(`${prefix}stop`)) {
+  } else if (message.content.startsWith(`${prefix}เล่นด้วย`)){
+    await message.channel.send('เพิ่มลงระบบสุ่มแล้ว!');
+    add_user_random(message, serverQueue);
+    return;
+  }
+   else if (message.content.startsWith(`${prefix}stop`)) {
     stop(message, serverQueue);
     return;
   }
@@ -60,42 +80,37 @@ async function execute(message, serverQueue) {
 
   var songInfo;
   var song;
-  songInfo = await ytdl.getInfo(args[1])  
+  var i = message.content.indexOf(' ');
+  var args2 = [message.content.slice(0,i), message.content.slice(i+1)];
+  console.log("AFTER SSLICE: ", args2)
+  // var url;
+  try {
+    songInfo = await ytdl.getInfo(args2[1]) 
+    console.log("WITH arg2 is url", args2[1])
+  } catch (error) {
+    await youtube.search(args2[1]).then(results => {
+      console.log("in catch");
+      // Unless you specify a type, it will only return 'video' results
+      console.log("WITH arg1 is url", args[1])
+      console.log("WITH arg2 is not url", results.videos[0].link); 
+      // console.log(typeof(results.videos[0].link))
+      args2[1] = results.videos[0].link;
+      
+    });
+
+    songInfo = await ytdl.getInfo(args2[1]) 
+  }
+  // songInfo = await ytdl.getInfo(args[1])  
   song = {
     title: songInfo.videoDetails.title,
     url: songInfo.videoDetails.video_url,
   };
 
-// try {
-
-//   songInfo = await ytdl.getInfo(args[1])  
-//   song = {
-//     title: songInfo.videoDetails.title,
-//     url: songInfo.videoDetails.video_url,
-//   };
-
-// } catch (error) {
-
-//   var ur = ""
-//   youtube.search(args[1]).then(results => {
-//     console.log(results.videos[0].link);
-//     ur = results.videos[0].link
-//   });
-//   console.log(ur);
-//   console.log(ur);
-//   songInfo = await ytdl.getInfo(ur)  
-//   song = {
-//     title: songInfo.videoDetails.title,
-//     url: songInfo.videoDetails.video_url,
-//   };
-
-// }
-
-  // songInfo = await ytdl.getInfo(args[1])  
-  // const song = {
-  //   title: songInfo.videoDetails.title,
-  //   url: songInfo.videoDetails.video_url,
-  // };    
+  try {
+    
+  } catch (error) {
+    
+  }
 
   if (!serverQueue) {
     const queueContruct = {
@@ -124,6 +139,19 @@ async function execute(message, serverQueue) {
     serverQueue.songs.push(song);
     return message.channel.send(`${song.title} has been added to the queue!`);
   }
+}
+
+function add_user_random(message, serverQueue){
+  if(random_user_queue.includes(message.author.id)){
+    return message.channel.send(
+      "ซึเนโอะเล่นหลายรอบแล้วนะ!"
+    );
+  }
+  else{
+    random_user_queue.push(message.author.id);
+  }
+  // random_user_queue.push(message.author.id);
+  console.log(random_user_queue);
 }
 
 function skip(message, serverQueue) {
